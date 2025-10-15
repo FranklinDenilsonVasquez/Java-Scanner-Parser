@@ -16,13 +16,19 @@ public class Scanners {
             System.out.println(file);
             
 
-            while (sc.hasNext()){
-                String currTocken = sc.next();
-                tokenString.add(currTocken);
-                System.out.println(currTocken);
-                
-            }
+            while (sc.hasNextLine()){
+                String line = sc.nextLine();
+                String[] tokens = line.split("(?=[(){};:,<>:=+\\-*/])|(?<=[(){};:,<>:=+\\-*/])|\\s");
 
+                for (String token : tokens){
+                    token = token.trim();
+                    System.out.println(token);
+                    if (!token.isEmpty()){
+                        tokenString.add(token);
+                    }
+                }
+            }
+            
             System.out.println(tokenString);
             
 
