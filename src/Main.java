@@ -1,9 +1,21 @@
 import java.io.*;
 import java.util.*;
 
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("hello");
+        String inputFile = args[0];
+        String relativePath = "test/";
+        File file = new File(relativePath + inputFile);
+        
+        Scanners scanner = new Scanners();
+        try {
+            scanner.Tokenizer(file);
+        } catch (Exception e) {
+            System.out.println("Something went wrong with Tockenizer.");
+            e.printStackTrace();
+        }
+
     }
 }
