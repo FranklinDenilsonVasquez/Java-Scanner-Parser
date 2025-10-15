@@ -12,11 +12,8 @@ public class Scanners {
         ArrayList<String> tokenString = new ArrayList<String>();
 
         try(Scanner sc = new Scanner(file)){
-            
-            System.out.println(file);
-            
-
             while (sc.hasNextLine()){
+
                 String line = sc.nextLine();
                 String[] tokens = line.split("(?=[(){};:,<>:=+\\-*/])|(?<=[(){};:,<>:=+\\-*/])|\\s");
 
@@ -29,6 +26,7 @@ public class Scanners {
                 }
             }
             
+            tokenString = finalTokenString(tokenString);
             System.out.println(tokenString);
             
 
@@ -38,4 +36,11 @@ public class Scanners {
         }
       return  tokenString; 
     }
+
+public ArrayList<String> finalTokenString(ArrayList<String> tokens){
+
+    return null;
 }
+}
+
+
