@@ -11,9 +11,11 @@ public class Main {
         
         Scanners scanner = new Scanners();
         try {
-            scanner.Tokenizer(file);
+            ArrayList<String> arrayToken = scanner.Tokenizer(file);
+            System.out.println(arrayToken);
+
         } catch (Exception e) {
-            System.out.println("Something went wrong with Tockenizer.");
+            System.out.println("Something went wrong with Tokenizer.");
             e.printStackTrace();
         }
 
