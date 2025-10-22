@@ -1,8 +1,8 @@
-import java.io.*;
+import java.util.ArrayList;
 import java.io.File;                  
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
+
 
 
 public class Scanners {
@@ -37,12 +37,12 @@ public class Scanners {
       return  tokenString; 
     }
 
+// Function that combines ":" and "=" to the assignment opperator ":="
 public ArrayList<String> finalTokenString(ArrayList<String> tokens){
 
     ArrayList<String> finaList = tokens;
-    System.out.println(tokens);
-
-    // Loop through the ArrayList and combine ":" and "=" to the assignment opperator ":="
+    
+    // Loop through the ArrayList 
     for (int i = 0; i < finaList.size(); i++){
         if (i + 1 < finaList.size()){
                 String currentToken = finaList.get(i);
