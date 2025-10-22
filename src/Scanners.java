@@ -39,7 +39,22 @@ public class Scanners {
 
 public ArrayList<String> finalTokenString(ArrayList<String> tokens){
 
-    return null;
+    ArrayList<String> finaList = tokens;
+    System.out.println(tokens);
+
+    // Loop through the ArrayList and combine ":" and "=" to the assignment opperator ":="
+    for (int i = 0; i < finaList.size(); i++){
+        if (i + 1 < finaList.size()){
+                String currentToken = finaList.get(i);
+                String nextToken = finaList.get(i+1);
+                if (currentToken.equals(":") && nextToken.equals("=")){
+                    finaList.set(i, ":=");
+                    finaList.remove(i+1);
+                }
+            continue;
+        }
+    }
+    return tokens;
 }
 }
 
