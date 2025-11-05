@@ -12,11 +12,14 @@ public class Scanners {
 
         ArrayList<String> tokenString = new ArrayList<>();
         ArrayList<Token> classifiedTokens = new ArrayList<>();
+        int lineNumber = 0;
 
         try(Scanner sc = new Scanner(file)){
             while (sc.hasNextLine()){
-
+                lineNumber++;
                 String line = sc.nextLine();
+                // Print the line number and the contents on that line for debugging 
+                System.out.println(lineNumber + " " +  line);
                 String[] tokens = line.split("(?=[(){};:,<>:=+\\-*/])|(?<=[(){};:,<>:=+\\-*/])|\\s");
 
                 for (String token : tokens){

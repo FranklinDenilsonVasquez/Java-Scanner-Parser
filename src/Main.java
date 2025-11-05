@@ -10,7 +10,9 @@ public class Main {
         
         Scanners scanner = new Scanners();
         try {
-            scanner.Tokenizer(file);
+            // scanner.Tokenizer(file);
+            Parser parser = new Parser(scanner.Tokenizer(file));
+            System.out.println(parser.getNextToken());
             
         } catch (Exception e) {
             System.out.println("Something went wrong with Tokenizer.");
