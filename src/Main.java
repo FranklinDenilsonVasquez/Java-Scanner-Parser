@@ -12,8 +12,8 @@ public class Main {
         try {
             // scanner.Tokenizer(file);
             Parser parser = new Parser(scanner.Tokenizer(file));
-            System.out.println(parser.getNextToken());
-            
+            //System.out.println(parser.getNextToken());
+            parser.parseProgram();
         } catch (Exception e) {
             System.out.println("Something went wrong with Tokenizer.");
             e.printStackTrace();

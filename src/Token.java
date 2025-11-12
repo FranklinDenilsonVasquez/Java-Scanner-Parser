@@ -1,10 +1,12 @@
 public class Token {
     String type;
     String value;
+    int line;
 
-    Token(String type, String value){
+    Token(String type, String value, int line){
         this.type = type;
         this.value = value;
+        this.line = line;
     }
 
     public String getValue(){
@@ -15,10 +17,14 @@ public class Token {
         return type;
     }
 
+    public int getLine(){
+        return line;
+    }
+
     // Retrun the type and value
     @Override
     public String toString() {
-        return "(" + value + ", " + type + ")";
+        return "(" + value + ", " + type + ", " + line + ")";
     }
 
     
