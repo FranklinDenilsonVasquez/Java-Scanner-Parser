@@ -293,11 +293,31 @@ public class Parser {
 
         operand();
 
+        if (currToken() == null){
+            errorMessage();
+            return;
+        }
+
+        String type = currToken().getValue();
+        String value = currToken().getType();
+
+        if (!type.equals("OPERATOR") || !(value.equals("=") || value.equals("<>") 
+                || value.equals(">") || value.equals("<") || value.equals(">=") 
+                || value.equals("<="))){
+                    errorMessage();
+                    return;
+        }
+        getNextToken();
+
+        operand();
+
     }
 
     public void while_stmt() {
         System.out.println("WHILESTMT");
         getNextToken();
+        
+
     }
 
     // Rule 13: EXPR -> FACTOR | FACTOR + EXPR | FACTOR - EXPR
