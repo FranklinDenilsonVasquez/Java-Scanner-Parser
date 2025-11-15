@@ -49,7 +49,7 @@ public class Parser {
 
     // Parse program
     public void parseProgram() {
-        System.out.println("In parser");
+        System.out.println("PROGRAM");
 
         if (!match("program")) {  
             errorMessage();
@@ -59,6 +59,7 @@ public class Parser {
         decl_sec();
 
         if (!match("begin")) {
+            System.out.println("hell");
             errorMessage();
             return;
         }
@@ -74,23 +75,21 @@ public class Parser {
             return;
         }
 
-        System.out.println("Parsing completed successfully!");
     }
 
     // Declaration section
     public void decl_sec() {
-        System.out.println("Entering decl_sec");
+        System.out.println("DECL_SEC");
 
         if (currToken() != null && !currToken().getType().equals("IDENTIFIER")) {
             decl();
         }
 
-        System.out.println("Exiting decl_sec");
     }
 
     // Single declaration
     public void decl() {
-        System.out.println("In decl section, current token: " + currToken());
+        System.out.println("DECL");
 
         id_list();
 
@@ -119,12 +118,11 @@ public class Parser {
         }
         getNextToken(); 
 
-        System.out.println("Declaration parsed successfully");
     }
 
     // Identifier list
     public void id_list() {
-        System.out.println("In id_list section, current token: " + currToken());
+        System.out.println("ID_LIST");
 
         if (!currToken().getValue().equals("IDENTIFIER")) {
             errorMessage();
@@ -132,6 +130,7 @@ public class Parser {
         }
         getNextToken();
 
+        System.out.println("ID_LIST");
         while (currToken() != null && currToken().getType().equals(",")) {
             getNextToken(); 
             if (currToken() == null && !currToken().getType().equals("IDENTIFIER")) {
@@ -141,7 +140,6 @@ public class Parser {
             getNextToken(); 
         }
 
-        System.out.println("ID list parsed successfully");
         
     }
 
@@ -171,13 +169,12 @@ public class Parser {
             }
         }
 
-        System.out.println("Exiting STMT_SEC");
     }
 
     // Assignment statement
     public void assign() {
         Token idToken = currToken();
-        System.out.println("In assign " + idToken);
+        System.out.println("ASSIGN");
         getNextToken(); 
 
         if (currToken() == null || !currToken().getType().equals(":=")) {
@@ -197,7 +194,7 @@ public class Parser {
 
     // Input statement
     public void input_stmt() {
-        System.out.println("In input_stmt " + currToken());
+        System.out.println("INPUT");
         getNextToken();
         id_list();
 
@@ -210,7 +207,7 @@ public class Parser {
 
     // Output statement
     public void output_stmt() {
-        System.out.println("In output_stmt " + currToken());
+        System.out.println("OUTPUT");
         getNextToken(); 
 
         if (currToken().getValue().equals("IDENTIFIER")) {
@@ -229,14 +226,73 @@ public class Parser {
         getNextToken(); 
     }
 
-    
+    /*  Rule 19: IFSTMT -> if COMP then STMT_SEC end if ; |
+                if COMP then STMT_SEC else STMT_SEC end if ;*/
     public void ifstmt() {
-        System.out.println("In ifstmt " + currToken());
+        System.out.println("STMT");
+
+        if (!currToken().getType().equals("if")){
+            errorMessage();
+            return;
+        }
+
         getNextToken();
+
+        if (!currToken().getType().equals("(")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        comp();
+
+        if (!currToken().getType().equals(")")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        if (!currToken().getType().equals("then")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        stmt_sec();
+
+        if (currToken() != null && currToken().getType().equals("else")){
+            getNextToken();
+            stmt_sec();
+        }
+
+        if (!currToken().getType().equals("end")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        if (!currToken().getType().equals("if")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        if (currToken().getType().equals(";")){
+            errorMessage();
+            return;
+        }
+        getNextToken();        
+    }
+
+    public void comp(){
+        System.out.println("COMP");
+
+        operand();
+
     }
 
     public void while_stmt() {
-        System.out.println("In while_stmt " + currToken());
+        System.out.println("WHILESTMT");
         getNextToken();
     }
 
@@ -283,7 +339,7 @@ public class Parser {
             getNextToken();
             expr();
 
-            if (currToken() == null || !currToken().getType().equals(")")){
+            if (currToken() == null || !value.equals(")")){
                 errorMessage();
                 return;
             }
