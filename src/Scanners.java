@@ -38,6 +38,7 @@ public class Scanners {
         // for (Token t : classifiedTokens) {
         //     System.out.println(t);
         // }
+        
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
             e.printStackTrace();

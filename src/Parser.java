@@ -34,17 +34,16 @@ public class Parser {
         return false;
     }
 
-    public void someFunction() {
-        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        System.out.println("Currently in method: " + methodName);
-    }
     // Error message
     public void errorMessage() {
         if (currToken() != null){
             System.out.println("Error on line " + currToken().getLine() + currToken());
+            System.exit(1);
         }
         else
             System.out.println("Error at end of input");
+             System.exit(1);
+
     }
 
     // Parse program
@@ -60,7 +59,6 @@ public class Parser {
         }
 
         if (!match("begin")) {
-            System.out.println("hell");
             errorMessage();
             return;
         }
@@ -134,14 +132,13 @@ public class Parser {
         System.out.println("ID_LIST");
         while (currToken() != null && currToken().getType().equals(",")) {
             getNextToken(); 
-            if (currToken() == null && !currToken().getType().equals("IDENTIFIER")) {
+            if (currToken() == null || !currToken().getValue().equals("IDENTIFIER")) {
                 errorMessage();
                 return;
             }
             getNextToken(); 
         }
 
-        
     }
 
     // Statement section
@@ -152,22 +149,33 @@ public class Parser {
             String stringValue = currToken().getType();  
             String typeValue = currToken().getValue();   
 
-            if (stringValue.equals("if")) {
-                ifstmt();
-            } else if (stringValue.equals("while")) {
-                while_stmt();
-            } else if (stringValue.equals("input")) {
-                input_stmt();
-            } else if (stringValue.equals("output")) {
-                output_stmt();
-            } else if (typeValue.equals("IDENTIFIER")) {
-                assign();
-            } else if (stringValue.equals("end") || stringValue.equals("else")) {
-                break;
-            } else {
-                errorMessage();
-                getNextToken();
+            if (typeValue.equals("KEYWORD")) {
+            switch (stringValue) {
+                case "if":
+                    ifstmt();
+                    break;
+                case "while":
+                    while_stmt();
+                    break;
+                case "input":
+                    input_stmt();
+                    break;
+                case "output":
+                    output_stmt();
+                    break;
+                case "end":
+                case "else":
+                    return; // exit STMT_SEC
+                default:
+                    errorMessage();
+                    getNextToken();
             }
+        } else if (typeValue.equals("IDENTIFIER")) {
+            assign();
+        } else {
+            errorMessage();
+            getNextToken();
+        }
         }
 
     }
@@ -176,10 +184,9 @@ public class Parser {
     public void assign() {
         System.out.println("ASSIGN");
         getNextToken(); 
-        System.out.println(currToken());
+        // System.out.println(currToken());
 
         if (currToken() == null || !currToken().getType().equals(":=")) {
-            System.out.println("h");
             errorMessage();
             return;
         }
@@ -192,6 +199,7 @@ public class Parser {
             return;
         }
         getNextToken(); 
+        // System.out.println("FFFFFFFFFFFFF");
     }
 
     // Input statement
@@ -220,6 +228,7 @@ public class Parser {
             errorMessage();
             return;
         }
+        getNextToken();
 
         if (!currToken().getType().equals(";")) {
             errorMessage();
@@ -249,8 +258,7 @@ public class Parser {
         comp();
 
         if (!currToken().getType().equals(")")){
-            /////////////////////////////
-            System.out.println("he");
+            // System.out.println("he");
             errorMessage();
             return;
         }
@@ -275,16 +283,17 @@ public class Parser {
         }
         getNextToken();
 
-        if (!currToken().getType().equals("if")){
+        if (!currToken().getValue().equals("KEYWORD") || !currToken().getType().equals("if")){
             errorMessage();
             return;
         }
         getNextToken();
 
-        if (currToken().getType().equals(";")){
+        if (!currToken().getType().equals(";")){
             errorMessage();
             return;
         }
+
         getNextToken();        
     }
 
@@ -315,8 +324,54 @@ public class Parser {
 
     public void while_stmt() {
         System.out.println("WHILESTMT");
+
+        if (!currToken().getType().equals("while")){
+            errorMessage();
+            return;
+        }
         getNextToken();
         
+        if (currToken() == null || !currToken().getType().equals("(")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        comp();
+
+        if (currToken() == null || !currToken().getType().equals(")")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        if (currToken() == null || !currToken().getType().equals("loop")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        stmt_sec();
+
+        if (currToken() == null || !currToken().getType().equals("end")){
+            errorMessage();
+            return;
+        }
+
+        getNextToken();
+
+        if (currToken() == null || !currToken().getType().equals("loop")){
+            errorMessage();
+            return;
+        }
+        getNextToken();
+
+        if (currToken() == null || !currToken().getType().equals(";")){
+            // System.out.println(currToken());
+            errorMessage();
+            return;
+        }
+        getNextToken();
 
     }
 
@@ -331,6 +386,8 @@ public class Parser {
             factor();
             
         }
+            // System.out.println("FFFFFFFFFFF");
+            
     }
 
     // Rule 14: FACTOR -> OPERAND | OPERAND * FACTOR | OPERAND / FACTOR
@@ -347,7 +404,6 @@ public class Parser {
     // Rule 15: OPERAND -> NUM | ID | ( EXPR )
     public void operand() {
         System.out.println("OPERAND");
-        System.out.println(currToken());
 
         if (currToken() == null) {
             errorMessage();
@@ -358,9 +414,10 @@ public class Parser {
         String value = currToken().getType();
 
         if (type.equals("IDENTIFIER") || type.equals("NUMBER")) {
+
             getNextToken(); // consume the ID or number
-            System.out.println(currToken());
-     
+            //System.out.println(currToken());
+            
         }
         else if (value.equals("(")) {
             getNextToken(); // consume '('
@@ -377,6 +434,7 @@ public class Parser {
         else {
             errorMessage();
         }
+
     }
-    
+        
 }
