@@ -229,7 +229,7 @@ public class Parser {
         getNextToken(); 
     }
 
-    // Dummy implementations for now
+    
     public void ifstmt() {
         System.out.println("In ifstmt " + currToken());
         getNextToken();
@@ -240,10 +240,57 @@ public class Parser {
         getNextToken();
     }
 
+    // Rule 13: EXPR -> FACTOR | FACTOR + EXPR | FACTOR - EXPR
     public void expr() {
-        while (currToken() != null && !currToken().getType().equals(";")) {
+        System.out.println("EXPR");
+        factor();
+
+        while (currToken() != null && (currToken().getType().equals("+") 
+                || currToken().getType().equals("-"))) {
             getNextToken();
+            factor();
             
+        }
+    }
+
+    // Rule 14: FACTOR -> OPERAND | OPERAND * FACTOR | OPERAND / FACTOR
+    public void factor(){
+        System.out.println("FACTOR");
+        operand();
+
+        while (currToken() != null && (currToken().getType().equals("*") || currToken().getType().equals("/"))){
+            getNextToken();
+            operand();
+        }
+    }
+
+    // Rule 15: OPERAND -> NUM | ID | ( EXPR )
+    public void operand(){
+        System.out.println("OPERAND");
+
+        if (currToken() == null){
+            errorMessage();
+            return;
+        }
+
+        String type = currToken().getValue();
+        String value = currToken().getType();
+
+        if (type.equals("IDENTIFIER") || type.equals("NUMBER")){
+            getNextToken();
+        }
+        else if (value.equals("(")){
+            getNextToken();
+            expr();
+
+            if (currToken() == null || !currToken().getType().equals(")")){
+                errorMessage();
+                return;
+            }
+            getNextToken();
+        }
+        else {
+            errorMessage();
         }
     }
     
