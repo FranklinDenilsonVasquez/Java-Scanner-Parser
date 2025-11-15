@@ -55,8 +55,9 @@ public class Parser {
             errorMessage();
             return;
         }
-
-        decl_sec();
+        while (!currToken().getType().equals("begin")){
+            decl_sec();
+        }
 
         if (!match("begin")) {
             System.out.println("hell");
@@ -173,11 +174,12 @@ public class Parser {
 
     // Assignment statement
     public void assign() {
-        Token idToken = currToken();
         System.out.println("ASSIGN");
         getNextToken(); 
+        System.out.println(currToken());
 
         if (currToken() == null || !currToken().getType().equals(":=")) {
+            System.out.println("h");
             errorMessage();
             return;
         }
@@ -247,6 +249,8 @@ public class Parser {
         comp();
 
         if (!currToken().getType().equals(")")){
+            /////////////////////////////
+            System.out.println("he");
             errorMessage();
             return;
         }
@@ -321,10 +325,11 @@ public class Parser {
     }
 
     // Rule 15: OPERAND -> NUM | ID | ( EXPR )
-    public void operand(){
+    public void operand() {
         System.out.println("OPERAND");
+        System.out.println(currToken());
 
-        if (currToken() == null){
+        if (currToken() == null) {
             errorMessage();
             return;
         }
@@ -332,18 +337,22 @@ public class Parser {
         String type = currToken().getValue();
         String value = currToken().getType();
 
-        if (type.equals("IDENTIFIER") || type.equals("NUMBER")){
-            getNextToken();
+        if (type.equals("IDENTIFIER") || type.equals("NUMBER")) {
+            getNextToken(); // consume the ID or number
+            System.out.println(currToken());
+     
         }
-        else if (value.equals("(")){
-            getNextToken();
-            expr();
+        else if (value.equals("(")) {
+            getNextToken(); // consume '('
+            expr();         // parse the expression inside parentheses
+            
 
-            if (currToken() == null || !value.equals(")")){
+            // Now check the current token for ')'
+            if (currToken() == null || !currToken().getType().equals(")")) {
                 errorMessage();
                 return;
             }
-            getNextToken();
+            getNextToken(); // consume ')'
         }
         else {
             errorMessage();
