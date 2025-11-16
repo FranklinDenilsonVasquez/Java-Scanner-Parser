@@ -35,9 +35,9 @@ public class Parser {
     }
 
     // Error message
-    public void errorMessage() {
+    public void errorMessage(String expected) {
         if (currToken() != null){
-            System.out.println("Error on line " + currToken().getLine() + currToken());
+            System.out.println("Error on line " + currToken().getLine() + ". Expected token " + "'" + expected + "'") ;
             System.exit(1);
         }
         else
@@ -51,7 +51,7 @@ public class Parser {
         System.out.println("PROGRAM");
 
         if (!match("program")) {  
-            errorMessage();
+            errorMessage("program");
             return;
         }
         while (!currToken().getType().equals("begin")){
@@ -59,22 +59,21 @@ public class Parser {
         }
 
         if (!match("begin")) {
-            errorMessage();
+            errorMessage("begin");
             return;
         }
         stmt_sec();
 
         if (!match("end")) {
-            errorMessage();
+            errorMessage("end");
             return;
         }
 
         if (!match(";")) {
-            errorMessage();
+            errorMessage(";");
             return;
         }
 
-        System.out.println("Correct grammar");
     }
 
     // Declaration section
@@ -94,26 +93,26 @@ public class Parser {
         id_list();
 
         if (!currToken().getType().equals(":")) {
-            errorMessage();
+            errorMessage(":");
             return;
         }
         getNextToken(); 
 
         if (!currToken().getValue().equals("KEYWORD")) {
-            errorMessage();
+            errorMessage("KEYWORD");
             return;
         }
         
         String type = currToken().getValue(); 
         if ((type.equals("int") || type.equals("float") || type.equals("double"))) {
             System.out.println("Unknown type: " + type);
-            errorMessage();
+            errorMessage("UNKOWN TYPE");
             return;
         }
         getNextToken(); 
 
         if (!currToken().getType().equals(";")) {
-            errorMessage();
+            errorMessage(";");
             return;
         }
         getNextToken(); 
@@ -125,7 +124,7 @@ public class Parser {
         System.out.println("ID_LIST");
 
         if (!currToken().getValue().equals("IDENTIFIER")) {
-            errorMessage();
+            errorMessage("IDENTIFIER");
             return;
         }
         getNextToken();
@@ -135,7 +134,7 @@ public class Parser {
             getNextToken(); 
             System.out.println("ID_LIST");
             if (currToken() == null || !currToken().getValue().equals("IDENTIFIER")) {
-                errorMessage();
+                errorMessage("IDENTIFIER");
                 return;
             }
             getNextToken(); 
@@ -169,13 +168,13 @@ public class Parser {
                 case "else":
                     return; 
                 default:
-                    errorMessage();
+                    errorMessage("ERROR");
                     getNextToken();
             }
         } else if (typeValue.equals("IDENTIFIER")) {
             assign();
         } else {
-            errorMessage();
+            errorMessage("IDENTIFIER");
             getNextToken();
         }
         }
@@ -188,7 +187,7 @@ public class Parser {
         getNextToken(); 
 
         if (currToken() == null || !currToken().getType().equals(":=")) {
-            errorMessage();
+            errorMessage(":=");
             return;
         }
         getNextToken(); 
@@ -196,7 +195,7 @@ public class Parser {
         expr();
 
         if (currToken() == null || !currToken().getType().equals(";")) {
-            errorMessage();
+            errorMessage(";");
             return;
         }
         getNextToken(); 
@@ -209,7 +208,7 @@ public class Parser {
         id_list();
 
         if (!currToken().getType().equals(";")) {
-            errorMessage();
+            errorMessage(";");
             return;
         }
         getNextToken(); 
@@ -225,14 +224,14 @@ public class Parser {
         } else if (currToken().getValue().equals("NUMBER")) {
             getNextToken();
         } else {
-            errorMessage();
+            errorMessage("NUMBER");
             return;
         }
         //getNextToken();
 
         if (!currToken().getType().equals(";")) {
 
-            errorMessage();
+            errorMessage(";");
             return;
         }
         getNextToken(); 
@@ -244,14 +243,14 @@ public class Parser {
         System.out.println("STMT");
 
         if (!currToken().getType().equals("if")){
-            errorMessage();
+            errorMessage("if");
             return;
         }
 
         getNextToken();
 
         if (!currToken().getType().equals("(")){
-            errorMessage();
+            errorMessage("(");
             return;
         }
         getNextToken();
@@ -259,13 +258,13 @@ public class Parser {
         comp();
 
         if (!currToken().getType().equals(")")){
-            errorMessage();
+            errorMessage(")");
             return;
         }
         getNextToken();
 
         if (!currToken().getType().equals("then")){
-            errorMessage();
+            errorMessage("then");
             return;
         }
         getNextToken();
@@ -278,19 +277,19 @@ public class Parser {
         }
 
         if (!currToken().getType().equals("end")){
-            errorMessage();
+            errorMessage("else");
             return;
         }
         getNextToken();
 
         if (!currToken().getValue().equals("KEYWORD") || !currToken().getType().equals("if")){
-            errorMessage();
+            errorMessage("if");
             return;
         }
         getNextToken();
 
         if (!currToken().getType().equals(";")){
-            errorMessage();
+            errorMessage(";");
             return;
         }
 
@@ -303,7 +302,7 @@ public class Parser {
         operand();
 
         if (currToken() == null){
-            errorMessage();
+            errorMessage("NOT NULL");
             return;
         }
 
@@ -313,7 +312,7 @@ public class Parser {
         if (!type.equals("OPERATOR") || !(value.equals("=") || value.equals("<>") 
                 || value.equals(">") || value.equals("<") || value.equals(">=") 
                 || value.equals("<="))){
-                    errorMessage();
+                    errorMessage("COMPARITOR");
                     return;
         }
         getNextToken();
@@ -326,13 +325,13 @@ public class Parser {
         System.out.println("WHILESTMT");
 
         if (!currToken().getType().equals("while")){
-            errorMessage();
+            errorMessage("while");
             return;
         }
         getNextToken();
         
         if (currToken() == null || !currToken().getType().equals("(")){
-            errorMessage();
+            errorMessage("(");
             return;
         }
         getNextToken();
@@ -340,13 +339,13 @@ public class Parser {
         comp();
 
         if (currToken() == null || !currToken().getType().equals(")")){
-            errorMessage();
+            errorMessage(")");
             return;
         }
         getNextToken();
 
         if (currToken() == null || !currToken().getType().equals("loop")){
-            errorMessage();
+            errorMessage("loop");
             return;
         }
         getNextToken();
@@ -354,20 +353,20 @@ public class Parser {
         stmt_sec();
 
         if (currToken() == null || !currToken().getType().equals("end")){
-            errorMessage();
+            errorMessage("end");
             return;
         }
 
         getNextToken();
 
         if (currToken() == null || !currToken().getType().equals("loop")){
-            errorMessage();
+            errorMessage("loop");
             return;
         }
         getNextToken();
 
         if (currToken() == null || !currToken().getType().equals(";")){
-            errorMessage();
+            errorMessage(";");
             return;
         }
         getNextToken();
@@ -404,7 +403,7 @@ public class Parser {
         System.out.println("OPERAND");
 
         if (currToken() == null) {
-            errorMessage();
+            errorMessage("OPERAND");
             return;
         }
 
@@ -423,13 +422,13 @@ public class Parser {
 
             // Now check the current token for ')'
             if (currToken() == null || !currToken().getType().equals(")")) {
-                errorMessage();
+                errorMessage(")");
                 return;
             }
             getNextToken(); 
         }
         else {
-            errorMessage();
+            errorMessage("OPERAND");
         }
 
     }
