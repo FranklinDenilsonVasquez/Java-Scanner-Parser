@@ -74,6 +74,7 @@ public class Parser {
             return;
         }
 
+        System.out.println("Correct grammar");
     }
 
     // Declaration section
@@ -129,9 +130,10 @@ public class Parser {
         }
         getNextToken();
 
-        System.out.println("ID_LIST");
+        
         while (currToken() != null && currToken().getType().equals(",")) {
             getNextToken(); 
+            System.out.println("ID_LIST");
             if (currToken() == null || !currToken().getValue().equals("IDENTIFIER")) {
                 errorMessage();
                 return;
@@ -165,7 +167,7 @@ public class Parser {
                     break;
                 case "end":
                 case "else":
-                    return; // exit STMT_SEC
+                    return; 
                 default:
                     errorMessage();
                     getNextToken();
@@ -184,7 +186,6 @@ public class Parser {
     public void assign() {
         System.out.println("ASSIGN");
         getNextToken(); 
-        // System.out.println(currToken());
 
         if (currToken() == null || !currToken().getType().equals(":=")) {
             errorMessage();
@@ -199,7 +200,6 @@ public class Parser {
             return;
         }
         getNextToken(); 
-        // System.out.println("FFFFFFFFFFFFF");
     }
 
     // Input statement
@@ -228,9 +228,10 @@ public class Parser {
             errorMessage();
             return;
         }
-        getNextToken();
+        //getNextToken();
 
         if (!currToken().getType().equals(";")) {
+
             errorMessage();
             return;
         }
@@ -258,7 +259,6 @@ public class Parser {
         comp();
 
         if (!currToken().getType().equals(")")){
-            // System.out.println("he");
             errorMessage();
             return;
         }
@@ -367,7 +367,6 @@ public class Parser {
         getNextToken();
 
         if (currToken() == null || !currToken().getType().equals(";")){
-            // System.out.println(currToken());
             errorMessage();
             return;
         }
@@ -386,7 +385,6 @@ public class Parser {
             factor();
             
         }
-            // System.out.println("FFFFFFFFFFF");
             
     }
 
@@ -415,13 +413,12 @@ public class Parser {
 
         if (type.equals("IDENTIFIER") || type.equals("NUMBER")) {
 
-            getNextToken(); // consume the ID or number
-            //System.out.println(currToken());
+            getNextToken(); 
             
         }
         else if (value.equals("(")) {
-            getNextToken(); // consume '('
-            expr();         // parse the expression inside parentheses
+            getNextToken(); 
+            expr();
             
 
             // Now check the current token for ')'
@@ -429,7 +426,7 @@ public class Parser {
                 errorMessage();
                 return;
             }
-            getNextToken(); // consume ')'
+            getNextToken(); 
         }
         else {
             errorMessage();
